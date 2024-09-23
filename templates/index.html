@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Task Manager</h1>
+        <form action="{{ url_for('add_task') }}" method="POST" class="task-form">
+            <input type="text" name="task" placeholder="Enter new task" required>
+            <select name="priority" required>
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+            </select>
+            <button type="submit">Add Task</button>
+        </form>
+        <table>
+            <thead>
+                <tr>
+                    <th>Task</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in range(tasks|length) %}
+                <tr>
+                    <td>{{ tasks[i] }}</td>
+                    <td>{{ priorities[i] }}</td>
+                    <td>{{ statuses[i] }}</td>
+                    <td>
+                        <form action="{{ url_for('update_task', task_id=i) }}" method="POST" class="inline-form">
+                            <button type="submit" name="status" value="1">Complete</button>
+                        </form>
+                        <form action="{{ url_for('delete_task', task_id=i) }}" method="GET" class="inline-form">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="4">No tasks available</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
